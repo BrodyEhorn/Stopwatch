@@ -3,11 +3,7 @@ import msvcrt
 import tkinter as tk
 
 
-
-
-
-
-def timer():
+def timer_console():
     seconds = int(input("Enter the time in seconds: "))
     elapsed = 0
     start_time = time.time()
@@ -16,7 +12,7 @@ def timer():
         elapsed = time.time() - start_time
         print(round(elapsed))
 
-def stopwatch():
+def stopwatch_console():
     input("Press Enter to start the stopwatch")
     start_time = time.time()
     flag = True
@@ -53,22 +49,35 @@ def stop_stopwatch():
     running = False
     switch_button()
 
-
 def switch_button():
     if start_button.cget("text") == "Start":
         start_button.config(text="Stop", command=stop_stopwatch)
+        clear_button.config(text="Lap", command=add_lap)
     else:
         start_button.config(text="Start", command=lambda: start_stopwatch(float(time_label.cget("text"))))
+        clear_button.config(text="Clear", command=clear_all)
 
-global running
+def add_lap():
+    if(running):
+        global lap_num
+        lap_num += 1
+        lap_listbox.insert(0, "Lap " + str( lap_num) + ":      " + time_label.cget("text"))
+
+def clear_all():
+    global lap_num
+    lap_num = 0
+    lap_listbox.delete(0, tk.END)
+    time_label.config(text="0.0")
+
+global running, lap_num
+lap_num = 0
 running = True
 start_time = 0
 
 
-
 root = tk.Tk()
 root.title("Stopwatch")
-root.geometry("400x400")
+root.geometry("400x500")
 
 time_label = tk.Label(root, text="0.0", font=("Helvetica", 30))
 time_label.pack(pady=20)
@@ -76,31 +85,18 @@ time_label.pack(pady=20)
 start_button = tk.Button(root, text="Start", font=("Helvetica", 20),command=lambda: start_stopwatch(float(time_label.cget("text"))))
 start_button.pack(pady=10)
 
-# stop_button = tk.Button(root, text="Stop",font=("Helvetica", 20),command=stop_stopwatch)
-# stop_button.pack(pady=10)
-
-# lap_button = tk.Button(root, text="Lap")
-# lap_button.pack(pady=10)
-
-clear_button = tk.Button(root, text="Clear", font=("Helvetica", 20), command=lambda: time_label.config(text="0.0"))
+clear_button = tk.Button(root, text="Clear", font=("Helvetica", 20), command=clear_all)
 clear_button.pack(pady=10)
 
-    
-    
 
-
+lap_frame = tk.Frame(root)
+lap_frame.pack(pady=10, padx=(10, 0), fill=tk.BOTH, expand=True)
+lap_listbox = tk.Listbox(lap_frame, height=10, font=("Helvetica", 15))
+lap_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+scrollbar = tk.Scrollbar(lap_frame, orient='vertical')
+scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+lap_listbox.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=lap_listbox.yview)
+    
 
 root.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-
