@@ -39,6 +39,7 @@ def start_stopwatch(elapsed_time):
     global running
     running = True
     start_time = time.time() - elapsed_time
+    switch_button()
     update_stopwatch(start_time)
 
 def update_stopwatch(start_time):
@@ -50,15 +51,14 @@ def update_stopwatch(start_time):
 def stop_stopwatch():
     global running
     running = False
+    switch_button()
 
 
-# def switch_button():
-#     if start_button.cget("text") == "Start Stopwatch":
-#         start_button.config(text="Stop Stopwatch", command=stop_stopwatch)
-#         start_stopwatch(float(time_label.cget("text")))
-#     else:
-#         start_button.config(text="Start Stopwatch", command=lambda: start_stopwatch(float(time_label.cget("text"))))
-#         stop_stopwatch()
+def switch_button():
+    if start_button.cget("text") == "Start":
+        start_button.config(text="Stop", command=stop_stopwatch)
+    else:
+        start_button.config(text="Start", command=lambda: start_stopwatch(float(time_label.cget("text"))))
 
 global running
 running = True
@@ -73,16 +73,16 @@ root.geometry("400x400")
 time_label = tk.Label(root, text="0.0", font=("Helvetica", 30))
 time_label.pack(pady=20)
 
-start_button = tk.Button(root, text="Start Stopwatch", command=lambda: start_stopwatch(float(time_label.cget("text"))))
+start_button = tk.Button(root, text="Start", font=("Helvetica", 20),command=lambda: start_stopwatch(float(time_label.cget("text"))))
 start_button.pack(pady=10)
 
-stop_button = tk.Button(root, text="Stop Stopwatch", command=stop_stopwatch)
-stop_button.pack(pady=10)
+# stop_button = tk.Button(root, text="Stop",font=("Helvetica", 20),command=stop_stopwatch)
+# stop_button.pack(pady=10)
 
 # lap_button = tk.Button(root, text="Lap")
 # lap_button.pack(pady=10)
 
-clear_button = tk.Button(root, text="Clear", command=lambda: time_label.config(text="0.0"))
+clear_button = tk.Button(root, text="Clear", font=("Helvetica", 20), command=lambda: time_label.config(text="0.0"))
 clear_button.pack(pady=10)
 
     
